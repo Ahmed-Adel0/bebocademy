@@ -78,15 +78,14 @@ function submitForm(e) {
   const form = document.getElementById('contactForm');
   const success = document.getElementById('formSuccess');
 
-  // Collect data
-  const name = form.querySelector('input[type="text"][placeholder*="الاسم"]').value;
-  const phone = form.querySelector('input[type="tel"]').value;
+  // Collect data using IDs
+  const name = document.getElementById('user_name').value;
+  const phone = document.getElementById('user_phone').value;
   const teacher = document.getElementById('selected_teacher').value || 'غير محدد';
-  const selects = form.querySelectorAll('select');
-  const subject = selects[0]?.value || 'غير محدد';
-  const level = selects[1]?.value || 'غير محدد';
-  const classes = selects[2]?.value || 'غير محدد';
-  const message = form.querySelector('textarea').value || 'لا توجد';
+  const subject = document.getElementById('user_subject').value || 'غير محدد';
+  const level = document.getElementById('user_level').value || 'غير محدد';
+  const classes = document.getElementById('user_sessions').value || 'غير محدد';
+  const message = document.getElementById('user_msg').value || 'لا توجد';
 
   // Toggle button state
   const btn = form.querySelector('.submit-btn');
@@ -107,18 +106,28 @@ function submitForm(e) {
 
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`;
 
+  // 1. Open WhatsApp immediately (Synchronously to avoid popup blockers)
+  const windowOpened = window.open(whatsappUrl, '_blank');
+  
+  // 2. Fallback if window.open was blocked
+  if (!windowOpened) {
+     // If blocked, we could potentially try location.href, but usually _blank is better.
+     // However, to ensure the user actually "sends", we can use location.href as a last resort.
+     // window.location.href = whatsappUrl;
+  }
+
+  // 3. UI Feedback after a short delay (for visual polish)
   setTimeout(() => {
-    // Open WhatsApp
-    window.open(whatsappUrl, '_blank');
-    
-    // UI Feedback
     form.style.display = 'none';
     success.style.display = 'flex';
     
     // Restore button for next time (even if hidden)
     btn.innerHTML = originalText;
     btn.disabled = false;
-  }, 1000);
+    
+    // Smooth scroll to success message
+    success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 600);
 }
 
 function resetForm() {
