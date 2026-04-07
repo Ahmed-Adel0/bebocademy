@@ -9,8 +9,11 @@ const tajawal = Tajawal({
 });
 
 export const metadata: Metadata = {
-  title: "متقن أكاديمي",
-  description: "المنصة الرائدة للتميز التعليمي في المملكة العربية السعودية، توفر دروساً عالية الجودة.",
+  title: "مُتقن أكاديمي | المنصة الرائدة للتميز التعليمي",
+  description: "المنصة الرائدة للتميز التعليمي في المملكة العربية السعودية، توفر دروساً عالية الجودة مع نخبة من المدرسين المعتمدين.",
+  icons: {
+    icon: "/logos/icon.png",
+  },
 };
 
 export default function RootLayout({

@@ -16,7 +16,8 @@ const teachers = [
     students: "120+",
     bio: "يركّز على تعليم الأطفال بطريقة تفاعلية تضمن الفهم العميق، مما يبني أساساً قويًا في القراءة والكتابة والحساب.",
     badge: " مدرس تأسيس",
-    color: "primary"
+    color: "primary",
+    experienceYears: 10
   },
   {
     name: "عبدالناصر محمد إبراهيم",
@@ -27,7 +28,8 @@ const teachers = [
     students: "14 سنة خبرة",
     bio: "يساعد الطلاب على تحقيق نتائج متميزة في القدرات والتحصيلي باستراتيجيات ذكية مجربة على مدى 14 عاماً.",
     badge: "خبير قدرات",
-    color: "primary"
+    color: "primary",
+    experienceYears: 14
   },
   {
     name: "أسامة علي عبدالجواد",
@@ -38,7 +40,8 @@ const teachers = [
     students: "5+ سنوات",
     bio: "يجمع بين العلوم الأكاديمية والتربوية، مع خبرة في تحفيظ القرآن والتجويد بأسلوب شيّق يحبب الطالب في العلم والدين.",
     badge: "محفظ قرآن",
-    color: "primary"
+    color: "primary",
+    experienceYears: 5
   },
   {
     name: "الأستاذ بدر فايد",
@@ -49,7 +52,8 @@ const teachers = [
     students: "22+ سنة خبرة",
     bio: "يمتلك خبرة طويلة في تدريس اللغة الإنجليزية وفق أحدث المناهج، ويركّز على بناء أساس قوي للطالب.",
     badge: "خبير إنجليزي",
-    color: "primary"
+    color: "primary",
+    experienceYears: 22
   },
   {
     name: "أحمد عطا صابر",
@@ -60,7 +64,8 @@ const teachers = [
     students: "25+ سنة خبرة",
     bio: "يتميز بقدرته على تأسيس الطلاب من الصفر وحتى الاحتراف، مع تبسيط المناهج بطريقة تناسب الجميع.",
     badge: "خبير تأسيس",
-    color: "primary"
+    color: "primary",
+    experienceYears: 25
   },
   {
     name: "محمد أحمد سعد",
@@ -71,7 +76,8 @@ const teachers = [
     students: "5 سنوات خبرة",
     bio: "يساعد الطلاب على تحسين نتائجهم من خلال التدريب المكثف على نماذج الاختبارات الحديثة.",
     badge: "خبير قدرات",
-    color: "primary"
+    color: "primary",
+    experienceYears: 5
   },
   {
     name: "هاشم السواق",
@@ -82,7 +88,8 @@ const teachers = [
     students: "3 سنوات خبرة",
     bio: "يقدّم شرحًا مبسطًا لمادة الكيمياء يساعد الطلاب على فهم الأساسيات بسهولة وتحقيق نتائج أفضل.",
     badge: "مدرس كيمياء",
-    color: "primary"
+    color: "primary",
+    experienceYears: 3
   },
   {
     name: "محمد علي محجوب",
@@ -93,7 +100,8 @@ const teachers = [
     students: "20+ سنة خبرة",
     bio: "يتميز بخبرة طويلة في تعليم اللغة إنجليزية لمختلف الأعمار، ويعتمد على أساليب تفاعلية حديثة.",
     badge: "خبير إنجليزي",
-    color: "primary"
+    color: "primary",
+    experienceYears: 20
   },
   {
     name: "محمود مسلم",
@@ -104,7 +112,8 @@ const teachers = [
     students: "3 سنوات خبرة",
     bio: "حاصل على الرخصة المهنية التعليمية تخصص الأحياء، يتميز بمستوى ممتاز في المادة العلمية وشرح التحصيلي لطلاب الثانوي.",
     badge: "خبير أحياء",
-    color: "primary"
+    color: "primary",
+    experienceYears: 3
   },
   {
     name: "ياسر صابر",
@@ -115,7 +124,8 @@ const teachers = [
     students: "خبرة واسعة",
     bio: "مدرس خبير يركز على تحسين مستوى الطلاب وتطوير مهاراتهم الدراسية بشكل ملحوظ.",
     badge: "معلم متميز",
-    color: "primary"
+    color: "primary",
+    experienceYears: 12
   },
   {
     name: "فتوح قطب البسيوني",
@@ -126,15 +136,20 @@ const teachers = [
     students: "خبرة طويلة",
     bio: "معلم قدير يمتلك سنوات طويلة من الخبرة في التعليم وبناء مهارات الطلاب الأساسية.",
     badge: "خبير تعليمي",
-    color: "primary"
+    color: "primary",
+    experienceYears: 30
   }
 ];
 
 const Teachers = () => {
   const [activeFilter, setActiveFilter] = useState("الكل");
+  const [showAll, setShowAll] = useState(false);
   const filters = ["الكل", "تأسيس", "إنجليزي", "قدرات وتحصيلي", "كيمياء وعلوم"];
 
-  const filteredTeachers = teachers.filter((t) => {
+  // Sort teachers by experienceYears descending
+  const sortedTeachers = [...teachers].sort((a, b) => b.experienceYears - a.experienceYears);
+
+  const filteredTeachers = sortedTeachers.filter((t) => {
     if (activeFilter === "الكل") return true;
     if (activeFilter === "قدرات وتحصيلي") return t.subjects.some(s => s.includes("قدرات") || s.includes("تحصيلي"));
     if (activeFilter === "إنجليزي") return t.subjects.some(s => s.includes("إنجليزي") || s.includes("لغة"));
@@ -142,6 +157,8 @@ const Teachers = () => {
     if (activeFilter === "كيمياء وعلوم") return t.subjects.some(s => s.includes("علوم") || s.includes("كيمياء") || s.includes("أحياء"));
     return true;
   });
+
+  const visibleTeachers = showAll ? filteredTeachers : filteredTeachers.slice(0, 6);
 
   return (
     <section id="teachers" className="py-16 md:py-24 relative overflow-hidden bg-background">
@@ -160,11 +177,14 @@ const Teachers = () => {
             فريق من المدرسين المؤهلين والمعتمدين — كل واحد منهم قصة نجاح بحد ذاتها
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-10 sm:mb-16">
             {filters.map((filter) => (
               <button
                 key={filter}
-                onClick={() => setActiveFilter(filter)}
+                onClick={() => {
+                  setActiveFilter(filter);
+                  setShowAll(false);
+                }}
                 className={`px-4 py-2 rounded-full text-sm font-bold transition-all cursor-pointer border ${
                   activeFilter === filter
                     ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20"
@@ -179,7 +199,7 @@ const Teachers = () => {
 
         <motion.div layout className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <AnimatePresence>
-            {filteredTeachers.map((t, i) => (
+            {visibleTeachers.map((t, i) => (
               <motion.div
                 layout
                 key={t.name}
@@ -207,7 +227,7 @@ const Teachers = () => {
                 </div>
               </div>
 
-              <div className="p-6">
+              <div className="p-6 sm:p-8">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 rounded-full border-2 border-primary/20 overflow-hidden shrink-0">
                     <img src={t.img} alt="" className="w-full h-full object-cover" />
@@ -247,24 +267,48 @@ const Teachers = () => {
                   {t.bio}
                 </p>
 
-                <Button 
-                  onClick={() => { 
-                    window.history.pushState(null, "", `/?teacher=${encodeURIComponent(t.name)}#register`); 
-                    window.dispatchEvent(new CustomEvent('teacherSelected', { 
-                      detail: { name: t.name, subject: t.subjects[0] } 
-                    }));
-                    document.getElementById("register")?.scrollIntoView({ behavior: "smooth" }); 
-                  }}
-                  className="w-full rounded-xl py-5 gap-2 font-bold shadow-lg shadow-primary/20 bg-primary hover:scale-[1.02] transition-transform text-sm cursor-pointer"
-                >
-                  <CalendarCheck className="w-4 h-4" />
-                  احجز معه الآن
-                </Button>
+                  <Button 
+                    onClick={() => { 
+                      window.history.pushState(null, "", `/?teacher=${encodeURIComponent(t.name)}#register`); 
+                      window.dispatchEvent(new CustomEvent('teacherSelected', { 
+                        detail: { name: t.name, subject: t.subjects[0] } 
+                      }));
+                      document.getElementById("register")?.scrollIntoView({ behavior: "smooth" }); 
+                    }}
+                    className="w-full rounded-xl py-7 sm:py-6 gap-3 font-black shadow-lg shadow-primary/20 bg-primary hover:scale-[1.02] transition-transform text-base sm:text-sm cursor-pointer"
+                  >
+                    <CalendarCheck className="w-5 h-5 sm:w-4 sm:h-4" />
+                    احجز معه الآن
+                  </Button>
               </div>
             </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {!showAll && filteredTeachers.length > 6 && (
+          <div className="flex justify-center mt-12">
+            <Button
+              onClick={() => setShowAll(true)}
+              variant="outline"
+              className="rounded-full px-12 py-6 border-primary text-primary hover:bg-primary hover:text-white font-black text-lg transition-all duration-300 shadow-xl shadow-primary/10"
+            >
+              عرض المزيد من المدرسين
+            </Button>
+          </div>
+        )}
+
+        {showAll && filteredTeachers.length > 6 && (
+          <div className="flex justify-center mt-12">
+            <Button
+              onClick={() => setShowAll(false)}
+              variant="ghost"
+              className="text-muted-foreground hover:text-primary font-bold"
+            >
+              عرض أقل
+            </Button>
+          </div>
+        )}
 
         <motion.div
            initial={{ opacity: 0, y: 20 }}
@@ -279,7 +323,7 @@ const Teachers = () => {
           <Button 
             onClick={() => { document.getElementById("register")?.scrollIntoView({ behavior: "smooth" }); }}
             size="lg" 
-            className="rounded-full px-8 sm:px-10 py-5 sm:py-6 font-black text-base sm:text-lg bg-foreground text-background hover:bg-foreground/90 relative z-10 w-full md:w-auto cursor-pointer"
+            className="rounded-full px-10 sm:px-12 py-7 sm:py-7 font-black text-lg bg-foreground text-background hover:bg-foreground/90 relative z-10 w-full md:w-auto cursor-pointer shadow-2xl"
           >
             ساعدني أختار المدرس
           </Button>

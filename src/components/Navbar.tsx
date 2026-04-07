@@ -40,10 +40,18 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 md:top-4 inset-x-0 z-50 flex justify-center px-0 md:px-4 pointer-events-none">
-      <nav className="glass md:rounded-full border-b md:border border-primary/20 px-6 py-3 md:py-2 flex items-center justify-between w-full max-w-7xl shadow-2xl shadow-primary/10 pointer-events-auto">
+    <div className="fixed top-3 md:top-6 inset-x-0 z-50 flex justify-center px-3 md:px-6 pointer-events-none">
+      {/* Mobile-only Background Glow */}
+      <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-primary/10 to-transparent blur-2xl md:hidden -z-10" />
+      
+      <nav className="glass rounded-full border border-primary/20 px-4 md:px-8 py-2 md:py-3 flex items-center justify-between w-full max-w-7xl shadow-[0_15px_40px_-15px_rgba(199,90,48,0.15)] pointer-events-auto relative overflow-hidden group">
+        {/* Brand Spotlight Effect (from Identity Colors) */}
+        <div className="absolute -bottom-[2px] left-1/2 -translate-x-1/2 w-2/3 h-1.5 bg-gradient-to-r from-transparent via-primary/40 to-transparent blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+        <div className="absolute -bottom-[1px] left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-gradient-to-r from-transparent via-accent/60 to-transparent blur-[0.5px]" />
+        <div className="absolute -bottom-[0.5px] left-1/2 -translate-x-1/2 w-1/3 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent" />
+        
         <div className="flex items-center gap-2">
-          <Link href="/" onClick={(e) => handleScrollTo(e, "")} className="relative h-10 w-28 md:h-12 md:w-40 transition-transform hover:scale-105 active:scale-95">
+          <Link href="/" onClick={(e) => handleScrollTo(e, "")} className="relative h-9 w-24 md:h-12 md:w-40 transition-transform hover:scale-105 active:scale-95">
             <Image
               src="/logos/2-Photoroom.png"
               alt="مُتقن أكاديمي"
@@ -73,7 +81,7 @@ const Navbar = () => {
               {activeSection === link.id && (
                 <motion.div
                   layoutId="navDot"
-                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"
+                  className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full shadow-[0_0_8px_rgba(199,90,48,0.8)]"
                 />
               )}
             </a>
@@ -94,11 +102,11 @@ const Navbar = () => {
         </div>
 
         <button 
-          className="md:hidden text-foreground p-2 rounded-xl bg-primary/5 border border-primary/10 active:scale-90 transition-transform" 
+          className="md:hidden text-foreground p-2 rounded-full hover:bg-primary/5 active:scale-90 transition-transform" 
           onClick={() => setOpen(!open)}
           aria-label="Toggle Menu"
         >
-          {open ? <X className="w-6 h-6 text-primary" /> : <Menu className="w-6 h-6" />}
+          {open ? <X className="w-5 h-5 text-primary" /> : <Menu className="w-5 h-5" />}
         </button>
       </nav>
 
@@ -106,20 +114,31 @@ const Navbar = () => {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
-            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            className="fixed inset-0 z-40 bg-background/60 md:hidden pointer-events-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-background/80 backdrop-blur-xl md:hidden pointer-events-auto"
             onClick={() => setOpen(false)}
           >
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute top-0 right-0 h-full w-4/5 max-w-sm bg-card border-l border-primary/10 p-8 pt-24 flex flex-col gap-6 shadow-2xl"
+              initial={{ y: "-100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="absolute top-0 inset-x-0 bg-card/95 border-b border-primary/20 p-6 pt-16 flex flex-col gap-2 shadow-2xl rounded-b-[32px]"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Compact Header */}
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] opacity-60">القائمة</span>
+                <button 
+                  onClick={() => setOpen(false)}
+                  className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary active:scale-90 transition-transform"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
               {[
                 { id: "", label: "الرئيسية" },
                 { id: "about", label: "من نحن" },
@@ -127,26 +146,26 @@ const Navbar = () => {
                 { id: "teachers", label: "المعلمون" },
               ].map((link, i) => (
                 <motion.a
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.05 }}
                   key={link.id}
                   href={`#${link.id}`}
                   onClick={(e) => handleScrollTo(e, link.id)}
-                  className={`font-black text-2xl py-2 flex items-center justify-between border-b border-primary/5 cursor-pointer ${
+                  className={`font-bold text-base py-2 flex items-center justify-between border-b border-primary/5 cursor-pointer ${
                     activeSection === link.id ? "text-primary" : "text-foreground"
                   }`}
                 >
                   {link.label}
-                  {activeSection === link.id && <div className="w-2 h-2 bg-primary rounded-full shadow-[0_0_10px_rgba(199,90,48,0.5)]" />}
+                  {activeSection === link.id && <div className="w-1.5 h-1.5 bg-primary rounded-full" />}
                 </motion.a>
               ))}
               
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-                className="mt-auto"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+                className="mt-2"
               >
                 <Button 
                   onClick={() => { 
@@ -154,11 +173,11 @@ const Navbar = () => {
                     window.dispatchEvent(new CustomEvent('teacherSelected', { detail: { name: '', subject: '' } }));
                     document.getElementById("register")?.scrollIntoView({ behavior: "smooth" }); 
                   }}
-                  className="bg-primary text-primary-foreground w-full rounded-2xl py-7 text-xl font-black shadow-xl shadow-primary/20 cursor-pointer"
+                  className="bg-primary text-primary-foreground w-full rounded-full py-5 text-base font-black shadow-md shadow-primary/20 cursor-pointer active:scale-95 transition-all"
                 >
                   سجل الآن
                 </Button>
-                <p className="text-center text-muted-foreground text-xs mt-6 font-medium">مُتقن أكاديمي - تميز في التعليم</p>
+                <p className="text-center text-muted-foreground text-[9px] mt-3 font-medium opacity-50">مُتقن أكاديمي</p>
               </motion.div>
             </motion.div>
           </motion.div>
