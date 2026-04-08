@@ -46,6 +46,8 @@ export default function SearchModal({ onSearch }: SearchModalProps) {
   const [showTooltip, setShowTooltip] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Removed auto-opening effect to prevent modal from showing on page load
+  /* 
   useEffect(() => {
     // Show modal on first visit
     const dismissed = sessionStorage.getItem(STORAGE_KEY);
@@ -54,6 +56,7 @@ export default function SearchModal({ onSearch }: SearchModalProps) {
       return () => clearTimeout(timer);
     }
   }, []);
+  */
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 120);
@@ -115,7 +118,9 @@ export default function SearchModal({ onSearch }: SearchModalProps) {
         Tooltip and label are absolute so they NEVER shift the button position.
       */}
       <div
-        className="fixed bottom-6 left-6 z-[150]"
+        className={`fixed bottom-6 left-6 z-[150] transition-all duration-500 transform ${
+          scrolled ? "translate-y-0 opacity-100 scale-100" : "translate-y-20 opacity-0 scale-50 pointer-events-none"
+        }`}
         style={{ width: 56, height: 56 }}
       >
         {/* Tooltip — absolutely positioned ABOVE, never affects button layout */}

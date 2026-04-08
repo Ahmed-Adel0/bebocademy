@@ -11,9 +11,12 @@ import {
 import { teachers, TIER_META } from "@/lib/teachers-data";
 import { TierBadge, ScoreRing, ScoreBreakdown } from "@/components/TeacherScore";
 import Navbar from "@/components/Navbar";
+import dynamic from "next/dynamic";
+
+const RegistrationForm = dynamic(() => import("@/components/sections/RegistrationForm"), { ssr: true });
 
 // ─── Filter Options ───────────────────────────────────────
-const CITIES = ["الكل", "الرياض", "جدة", "تبوك", "الدمام"];
+const CITIES = ["الكل", "الرياض", "جدة", "تبوك", "الدمام", "الأحساء"];
 const SUBJECTS = ["الكل", "رياضيات", "إنجليزي", "علوم", "أحياء", "كيمياء", "قدرات", "تحصيلي", "تأسيس", "لغة عربية", "قرآن"];
 const STAGES = ["الكل", "ابتدائي", "متوسط", "ثانوي", "جامعي"];
 const RATINGS = ["الكل", "5.0", "4.9+", "4.8+"];
@@ -186,7 +189,7 @@ function TeacherCard({ t }: { t: (typeof teachers)[0] }) {
         <button
           onClick={() => {
             window.dispatchEvent(new CustomEvent("teacherSelected", { detail: { name: t.name, subject: t.subjects[0] } }));
-            window.location.href = "/#register";
+            document.getElementById("register")?.scrollIntoView({ behavior: "smooth" });
           }}
           className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-black rounded-xl py-3 text-sm transition-all duration-200 cursor-pointer shadow-sm shadow-primary/20"
         >
@@ -211,32 +214,73 @@ export default function TeachersPage() {
 
   const reset = () => setFilters(defaultFilters);
 
+  // ─── Normalization Helper ───
+  const normalize = (txt: string) => {
+    return txt
+      .toLowerCase()
+      .replace(/[أإآ]/g, "ا")
+      .replace(/[ة]/g, "ه")
+      .replace(/[ى]/g, "ي")
+      .replace(/\s+/g, "")
+      .trim();
+  };
+
   const filtered = useMemo(() => {
     let list = [...teachers];
 
+    // 1. Search Filter (Normalized)
     if (filters.search.trim()) {
-      const q = filters.search.toLowerCase();
-      list = list.filter(
-        (t) =>
-          t.name.includes(q) ||
-          t.subjects.some((s) => s.includes(q)) ||
-          t.city.includes(q) ||
-          t.badge.includes(q)
-      );
+      const q = normalize(filters.search);
+      list = list.filter((t) => {
+        const nameMatch = normalize(t.name).includes(q);
+        const subjectMatch = t.subjects.some(s => normalize(s).includes(q));
+        const cityMatch = normalize(t.city).includes(q);
+        const roleMatch = normalize(t.role).includes(q);
+        return nameMatch || subjectMatch || cityMatch || roleMatch;
+      });
     }
-    if (filters.city !== "الكل") list = list.filter((t) => t.city === filters.city);
-    if (filters.subject !== "الكل") list = list.filter((t) => t.subjects.some((s) => s.includes(filters.subject)));
-    if (filters.stage !== "الكل") list = list.filter((t) => t.stages.includes(filters.stage));
+
+    // 2. City Filter
+    if (filters.city !== "الكل") {
+      list = list.filter((t) => t.city === filters.city);
+    }
+
+    // 3. Subject Filter (Flexible Matching)
+    if (filters.subject !== "الكل") {
+      const sFilter = normalize(filters.subject);
+      list = list.filter((t) => {
+        return t.subjects.some(sub => {
+          const sNormalized = normalize(sub);
+          // Precise mapping for common variations
+          if (sFilter === "انجليزي" && (sNormalized.includes("انجليزي") || sNormalized.includes("english"))) return true;
+          if (sFilter === "لغه‌عربيه" && (sNormalized.includes("عربي") || sNormalized.includes("لغتي") || sNormalized.includes("بلاغه"))) return true;
+          if (sFilter === "رياضيات" && (sNormalized.includes("رياضيات") || sNormalized.includes("كمي") || sNormalized.includes("احصاء"))) return true;
+          return sNormalized.includes(sFilter);
+        });
+      });
+    }
+
+    // 4. Stage Filter
+    if (filters.stage !== "الكل") {
+      list = list.filter((t) => t.stages.includes(filters.stage));
+    }
+    
+    // 5. Rating Filter
     if (filters.rating === "5.0") list = list.filter((t) => t.rating === "5.0");
     else if (filters.rating === "4.9+") list = list.filter((t) => parseFloat(t.rating) >= 4.9);
     else if (filters.rating === "4.8+") list = list.filter((t) => parseFloat(t.rating) >= 4.8);
+
+    // 6. Mode Filter
     if (filters.mode === "أونلاين") list = list.filter((t) => t.online);
     else if (filters.mode === "أوفلاين") list = list.filter((t) => t.offline);
+
+    // 7. Tier Filter
     if (filters.tier !== "الكل") {
       const tierMap: Record<string, string> = { "بلاتيني": "platinum", "ذهبي": "gold", "فضي": "silver", "برونزي": "bronze" };
       list = list.filter((t) => t.tier === tierMap[filters.tier]);
     }
 
+    // Sort
     if (filters.sortBy === "score") list.sort((a, b) => b.motqenScore - a.motqenScore);
     else if (filters.sortBy === "rating") list.sort((a, b) => parseFloat(b.rating) - parseFloat(a.rating));
     else if (filters.sortBy === "experience") list.sort((a, b) => b.experienceYears - a.experienceYears);
@@ -469,6 +513,7 @@ export default function TeachersPage() {
             </div>
           </div>
         </div>
+        <RegistrationForm />
       </main>
     </>
   );

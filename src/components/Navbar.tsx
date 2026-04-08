@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Menu, X, GraduationCap } from "lucide-react";
 import { m, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [teacherModalOpen, setTeacherModalOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const sections = ["about", "how-it-works", "services", "teachers", "register"];
@@ -39,12 +41,15 @@ const Navbar = () => {
   }, []);
 
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    setOpen(false);
-    if (!id) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    // Only intercept and scroll smoothly if we're already on the homepage
+    if (pathname === "/") {
+      e.preventDefault();
+      setOpen(false);
+      if (!id) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
