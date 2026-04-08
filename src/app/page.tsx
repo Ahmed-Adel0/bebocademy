@@ -1,12 +1,15 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
-import HowItWorks from "@/components/sections/HowItWorks";
-import Services from "@/components/sections/Services";
-import Teachers from "@/components/sections/Teachers";
-import RegistrationForm from "@/components/sections/RegistrationForm";
-import FAQ from "@/components/sections/FAQ";
+import dynamic from "next/dynamic";
 import Image from "next/image";
+
+// Lazy load below-the-fold components
+const About = dynamic(() => import("@/components/sections/About"), { ssr: true });
+const HowItWorks = dynamic(() => import("@/components/sections/HowItWorks"), { ssr: true });
+const Services = dynamic(() => import("@/components/sections/Services"), { ssr: true });
+const Teachers = dynamic(() => import("@/components/sections/Teachers"), { ssr: true });
+const RegistrationForm = dynamic(() => import("@/components/sections/RegistrationForm"), { ssr: true });
+const FAQ = dynamic(() => import("@/components/sections/FAQ"), { ssr: true });
 
 export default function Home() {
   return (

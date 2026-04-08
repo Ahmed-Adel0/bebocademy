@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { CalendarCheck, GraduationCap, Star, Clock } from "lucide-react";
 
@@ -102,17 +103,20 @@ const Hero = () => {
               
               {/* The Image (Emerging) */}
               <div className="relative z-20 w-full h-full flex items-end justify-center pt-8 overflow-hidden pointer-events-none">
-                <motion.img
+                <motion.div
                   initial={{ y: 100, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4, duration: 1, ease: "easeOut" }}
-                  src="/assets/imgs/male-Photoroom.png"
-                  alt="BeboCademy Education"
-                  className="w-auto h-auto max-h-[350px] sm:max-h-[450px] lg:max-h-[550px] object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.5)] z-20"
-                  onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=2070";
-                  }}
-                />
+                >
+                  <Image
+                    src="/assets/imgs/male-Photoroom.png"
+                    alt="BeboCademy Education"
+                    width={550}
+                    height={600}
+                    priority
+                    className="w-auto h-auto max-h-[350px] sm:max-h-[450px] lg:max-h-[550px] object-contain drop-shadow-[0_25px_50px_rgba(0,0,0,0.5)] z-20"
+                  />
+                </motion.div>
               </div>
 
               {/* Floating Status Cards */}

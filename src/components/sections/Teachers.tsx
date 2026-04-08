@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Star, CalendarCheck, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const teachers = [
   {
@@ -210,14 +211,12 @@ const Teachers = () => {
                 className="group bg-card rounded-3xl overflow-hidden border border-border hover:border-primary/50 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10"
               >
               <div className="relative h-72 overflow-hidden bg-gradient-to-b from-muted/40 to-muted/20">
-                <img
+                <Image
                   src={t.img}
                   alt={t.name}
-                  className="w-full h-full object-contain object-bottom"
-                  onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&q=80&w=1000";
-                    e.currentTarget.className = "w-full h-full object-cover";
-                  }}
+                  fill
+                  className="object-contain object-bottom transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60" />
                 <div className="absolute top-4 right-4">
@@ -229,8 +228,8 @@ const Teachers = () => {
 
               <div className="p-6 sm:p-8">
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-full border-2 border-primary/20 overflow-hidden shrink-0">
-                    <img src={t.img} alt="" className="w-full h-full object-cover" />
+                  <div className="w-12 h-12 rounded-full border-2 border-primary/20 overflow-hidden shrink-0 relative">
+                    <Image src={t.img} alt="" fill className="object-cover" />
                   </div>
                   <div className="text-right">
                     <h4 className="font-black text-lg text-foreground leading-tight">{t.name}</h4>
