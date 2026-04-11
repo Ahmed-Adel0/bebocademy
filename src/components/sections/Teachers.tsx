@@ -136,11 +136,16 @@ const Teachers = () => {
                 </div>
 
                 <button
-                  onClick={() =>
+                  onClick={() => {
+                    window.dispatchEvent(
+                      new CustomEvent("teacherSelected", {
+                        detail: { name: t.name, subject: t.subjects[0] },
+                      }),
+                    );
                     document
                       .getElementById("register")
-                      ?.scrollIntoView({ behavior: "smooth" })
-                  }
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
                   className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-black rounded-xl py-3 text-sm transition-all duration-200 cursor-pointer shadow-sm shadow-primary/20"
                 >
                   <CalendarCheck className="w-4 h-4" />
