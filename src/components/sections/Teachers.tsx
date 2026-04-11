@@ -2,26 +2,41 @@
 
 import { m } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Star, CalendarCheck, GraduationCap, ArrowLeft, MapPin } from "lucide-react";
+import {
+  Star,
+  CalendarCheck,
+  GraduationCap,
+  ArrowLeft,
+  MapPin,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { teachers } from "@/lib/teachers-data";
 
 // Top 3 teachers by rating + experience
 const topTeachers = [...teachers]
-  .sort((a, b) => b.experienceYears - a.experienceYears || parseFloat(b.rating) - parseFloat(a.rating))
+  .sort(
+    (a, b) =>
+      b.experienceYears - a.experienceYears ||
+      parseFloat(b.rating) - parseFloat(a.rating),
+  )
   .slice(0, 3);
 
 const Teachers = () => {
   return (
-    <section id="teachers" className="py-20 md:py-32 relative overflow-hidden bg-background">
+    <section
+      id="teachers"
+      className="py-20 md:py-32 relative overflow-hidden bg-background"
+    >
       <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-section-alt to-transparent" />
 
       <div className="container max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-
         {/* Header */}
         <div className="text-center mb-14">
-          <Badge variant="outline" className="mb-4 border-primary/20 text-primary px-4 py-1.5 rounded-full bg-primary/5 font-bold">
+          <Badge
+            variant="outline"
+            className="mb-4 border-primary/20 text-primary px-4 py-1.5 rounded-full bg-primary/5 font-bold"
+          >
             <GraduationCap className="w-3.5 h-3.5 mr-2" />
             نخبة المدرسين
           </Badge>
@@ -29,7 +44,8 @@ const Teachers = () => {
             تعرف على <span className="text-primary">أفضل المدرسين</span>
           </h2>
           <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto">
-            فريق من المدرسين المؤهلين والمعتمدين — كل واحد منهم قصة نجاح بحد ذاتها
+            فريق من المدرسين المؤهلين والمعتمدين — كل واحد منهم قصة نجاح بحد
+            ذاتها
           </p>
         </div>
 
@@ -72,14 +88,21 @@ const Teachers = () => {
                     <Image src={t.img} alt="" fill className="object-cover" />
                   </div>
                   <div className="text-right flex-1">
-                    <h3 className="font-black text-foreground text-sm leading-snug">{t.name}</h3>
-                    <p className="text-[10px] text-primary font-bold mt-0.5">{t.role}</p>
+                    <h3 className="font-black text-foreground text-sm leading-snug">
+                      {t.name}
+                    </h3>
+                    <p className="text-[10px] text-primary font-bold mt-0.5">
+                      {t.role}
+                    </p>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap gap-1 mb-3 justify-end">
                   {t.subjects.slice(0, 3).map((s, j) => (
-                    <span key={j} className="text-[9px] font-bold px-2 py-0.5 rounded bg-muted border border-border text-muted-foreground">
+                    <span
+                      key={j}
+                      className="text-[9px] font-bold px-2 py-0.5 rounded bg-muted border border-border text-muted-foreground"
+                    >
                       {s}
                     </span>
                   ))}
@@ -88,12 +111,17 @@ const Teachers = () => {
                 <div className="grid grid-cols-3 gap-1 bg-muted/30 rounded-xl p-2 mb-4 text-center">
                   <div>
                     <div className="text-xs font-black flex items-center justify-center gap-0.5">
-                      {t.rating} <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400" />
+                      {t.rating}{" "}
+                      <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400" />
                     </div>
-                    <div className="text-[8px] text-muted-foreground">تقييم</div>
+                    <div className="text-[8px] text-muted-foreground">
+                      تقييم
+                    </div>
                   </div>
                   <div className="border-x border-border">
-                    <div className="text-xs font-black">{t.experienceYears}س</div>
+                    <div className="text-xs font-black">
+                      {t.experienceYears}س
+                    </div>
                     <div className="text-[8px] text-muted-foreground">خبرة</div>
                   </div>
                   <div>
@@ -101,15 +129,18 @@ const Teachers = () => {
                       <MapPin className="w-2.5 h-2.5 text-primary" />
                       {t.city}
                     </div>
-                    <div className="text-[8px] text-muted-foreground">المدينة</div>
+                    <div className="text-[8px] text-muted-foreground">
+                      المدينة
+                    </div>
                   </div>
                 </div>
 
                 <button
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent("teacherSelected", { detail: { name: t.name, subject: t.subjects[0] } }));
-                    document.getElementById("register")?.scrollIntoView({ behavior: "smooth" });
-                  }}
+                  onClick={() =>
+                    document
+                      .getElementById("register")
+                      ?.scrollIntoView({ behavior: "smooth" })
+                  }
                   className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-black rounded-xl py-3 text-sm transition-all duration-200 cursor-pointer shadow-sm shadow-primary/20"
                 >
                   <CalendarCheck className="w-4 h-4" />
@@ -133,12 +164,15 @@ const Teachers = () => {
 
           <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-6 text-right">
             <div>
-              <p className="text-[11px] font-black text-primary uppercase tracking-widest mb-2">+70 مدرس بانتظارك</p>
+              <p className="text-[11px] font-black text-primary uppercase tracking-widest mb-2">
+                +70 مدرس بانتظارك
+              </p>
               <h3 className="text-2xl sm:text-3xl font-black text-foreground mb-2">
                 تصفح جميع المدرسين
               </h3>
               <p className="text-muted-foreground text-sm max-w-md">
-                فلتر حسب المدينة والمادة والمرحلة والتقييم وأونلاين/أوفلاين — اعثر على مدرسك المثالي.
+                فلتر حسب المدينة والمادة والمرحلة والتقييم وأونلاين/أوفلاين —
+                اعثر على مدرسك المثالي.
               </p>
             </div>
             <Link
@@ -150,7 +184,6 @@ const Teachers = () => {
             </Link>
           </div>
         </m.div>
-
       </div>
     </section>
   );
