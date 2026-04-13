@@ -4,6 +4,6 @@ import { createClient } from '@supabase/supabase-js'
 // IMPORTANT: Never expose this client or the service_role key to the browser.
 // This file must only be imported by Server Actions or API Routes.
 export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder',
 )
