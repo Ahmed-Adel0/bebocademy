@@ -62,24 +62,22 @@ export async function createMeeting(input: {
     // Notify teacher
     await sendNotification({
       userId: input.teacherId,
-      type: "meeting_scheduled",
+      type: "general",
       data: {
-        otherName: student?.full_name ?? "طالب",
-        scheduledAt: scheduledDate,
-        duration: String(input.durationMinutes),
-        role: "teacher",
+        title: "حصة دراسية جديدة",
+        message: `تم جدولة حصة مع الطالب ${student?.full_name ?? "طالب"} في ${scheduledDate} لمدة ${input.durationMinutes} دقيقة.`,
+        link: "/dashboard",
       },
     });
 
     // Notify student
     await sendNotification({
       userId: input.studentId,
-      type: "meeting_scheduled",
+      type: "general",
       data: {
-        otherName: teacher?.full_name ?? "معلم",
-        scheduledAt: scheduledDate,
-        duration: String(input.durationMinutes),
-        role: "student",
+        title: "حصة دراسية جديدة",
+        message: `تم جدولة حصة مع المعلم ${teacher?.full_name ?? "معلم"} في ${scheduledDate} لمدة ${input.durationMinutes} دقيقة.`,
+        link: "/dashboard",
       },
     });
 

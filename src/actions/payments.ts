@@ -143,8 +143,11 @@ export async function rejectPayment(paymentId: string, reason: string) {
 
     await sendNotification({
       userId: payment.student_id,
-      type: "payment_rejected",
-      data: { reason },
+      type: "general",
+      data: {
+        title: "لم يتم قبول الدفع",
+        message: `لم يتم قبول عملية الدفع. ${reason ? "السبب: " + reason : "يرجى التواصل مع الإدارة."}`,
+      },
     });
 
     revalidatePath("/admin/payments");

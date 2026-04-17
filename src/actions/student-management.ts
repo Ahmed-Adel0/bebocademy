@@ -216,6 +216,24 @@ export async function submitEvaluation(input: {
   });
 
   if (error) return { success: false, error: error.message };
+
+  // Notify admins about the evaluation
+  const { data: teacher } = await supabaseAdmin
+    .from("profiles")
+    .select("full_name")
+    .eq("id", booking.teacher_id)
+    .single();
+
+  await sendAdminNotifications({
+    type: "evaluation_received",
+    data: {
+      studentName: booking.student_name ?? "طالب",
+      teacherName: teacher?.full_name ?? "معلم",
+      rating: String(input.rating),
+      wantsContinue: String(input.wantsContinue),
+    },
+  });
+
   return { success: true };
 }
 
