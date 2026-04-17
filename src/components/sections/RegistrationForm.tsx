@@ -265,7 +265,7 @@ const RegistrationFormContent = () => {
             </div>
 
             {/* Teacher Name */}
-            <FormField
+       {/*      <FormField
               icon={<Briefcase className="w-4 h-4" />}
               label="المدرس المطلوب"
               hint="اختياري"
@@ -285,7 +285,7 @@ const RegistrationFormContent = () => {
                   </m.div>
                 )}
               </div>
-            </FormField>
+            </FormField> */}
 
             {/* Details */}
             <FormField
