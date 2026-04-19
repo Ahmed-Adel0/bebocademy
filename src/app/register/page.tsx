@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { SAUDI_REGIONS } from "@/lib/constants/locations";
+import { notifyAdminsOfNewRegistration } from "@/lib/notifications";
 
 type IntendedRole = "student" | "teacher";
 
@@ -117,6 +118,11 @@ export default function RegisterPage() {
           await supabase.from("profiles").update({ username: cleanUsername }).eq("id", signupData.user!.id);
         }, 1000);
       }
+
+      // Notify admins about the new registration (profile row is created by a DB trigger on auth.users insert)
+      setTimeout(() => {
+        notifyAdminsOfNewRegistration(signupData.user!.id, intendedRole).catch(() => {});
+      }, 1500);
 
       localStorage.setItem("verify_email", formData.email);
       localStorage.setItem("intended_role", intendedRole);

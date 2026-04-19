@@ -90,15 +90,15 @@ export default function AdminStudentsPage() {
       {
         const res = await supabase
           .from("profiles")
-          .select("id, full_name, email, phone, city, grade_level, avatar_url, is_suspended, updated_at")
+          .select("id, full_name, email, phone, city, grade_level, avatar_url, is_suspended, created_at")
           .eq("role", "student")
-          .order("updated_at", { ascending: false });
+          .order("created_at", { ascending: false });
         if (res.error?.code === "42703") {
           const fallback = await supabase
             .from("profiles")
-            .select("id, full_name, email, phone, city, avatar_url, is_suspended, updated_at")
+            .select("id, full_name, email, phone, city, avatar_url, is_suspended, created_at")
             .eq("role", "student")
-            .order("updated_at", { ascending: false });
+            .order("created_at", { ascending: false });
           profiles = fallback.data;
         } else {
           profiles = res.data;

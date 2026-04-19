@@ -15,6 +15,8 @@ type NotificationType =
   | "teacher_rejected"       // → teacher: your application was rejected
   | "new_booking"            // → teacher: a student booked you
   | "new_booking_admin"      // → admin: new booking on the platform
+  | "new_student_register"   // → admin: a new student just signed up
+  | "new_teacher_register"   // → admin: a new teacher just signed up
   | "payment_confirmed"      // → student: payment verified
   | "general";               // → anyone: custom message
 
@@ -82,6 +84,18 @@ function buildNotification(type: NotificationType, data: Record<string, string> 
         message: `تم إنشاء حصة بين الطالب ${data.studentName || ""} والمعلم ${data.teacherName || ""}.`,
         link: "/admin/meetings",
       };
+    case "new_student_register":
+      return {
+        title: "طالب جديد سجّل في المنصة",
+        message: `قام ${data.userName || "طالب"} بإنشاء حساب جديد${data.city ? ` من ${data.city}` : ""}.`,
+        link: "/admin/students",
+      };
+    case "new_teacher_register":
+      return {
+        title: "معلم جديد سجّل في المنصة",
+        message: `قام ${data.userName || "معلم"} بإنشاء حساب جديد${data.city ? ` من ${data.city}` : ""}. يمكن مراجعة طلب الانضمام.`,
+        link: "/admin/applications",
+      };
     case "evaluation_received":
       return {
         title: "تقييم جديد من طالب",
@@ -140,4 +154,33 @@ export async function sendAdminNotifications(input: {
   }));
 
   await supabaseAdmin.from("notifications").insert(rows);
+}
+
+/**
+ * Notify all admins that a new user just registered.
+ * Abuse guard: only fires when the target profile was created
+ * in the last 10 minutes (prevents replaying this with any userId).
+ */
+export async function notifyAdminsOfNewRegistration(
+  userId: string,
+  intendedRole: "student" | "teacher"
+) {
+  const { data: profile } = await supabaseAdmin
+    .from("profiles")
+    .select("full_name, city, created_at")
+    .eq("id", userId)
+    .single();
+
+  if (!profile) return;
+
+  const createdAt = new Date((profile as { created_at: string }).created_at);
+  if (Date.now() - createdAt.getTime() > 10 * 60 * 1000) return;
+
+  await sendAdminNotifications({
+    type: intendedRole === "teacher" ? "new_teacher_register" : "new_student_register",
+    data: {
+      userName: (profile as { full_name: string | null }).full_name ?? "",
+      city: (profile as { city: string | null }).city ?? "",
+    },
+  });
 }
