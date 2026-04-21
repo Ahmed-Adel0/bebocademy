@@ -239,7 +239,7 @@ function AnalyticsContent({ analytics, stats }: { analytics: NonNullable<AdminAn
                     outerRadius={90}
                     paddingAngle={3}
                     dataKey="value"
-                    label={(entry) => `${entry.value}`}
+                    label={(entry: any) => `${entry.value}`}
                   >
                     {analytics.lessonBreakdown.map((entry, i) => (
                       <Cell key={i} fill={entry.fill} />
